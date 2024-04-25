@@ -1,75 +1,68 @@
-class Shape {
-    constructor(type, alignment, drawChar, rows, columns) {
-      this.type = type;
-      this.alignment = alignment;
-      this.drawChar = drawChar;
-      this.rows = rows;
-      this.columns = columns;
-    }
-  
-    draw() {
-      let shape = '';
-      switch (this.type) {
-        case 'rectangle':
-          shape = this.drawRectangle();
-          break;
-        case 'square':
-          shape = this.drawSquare();
-          break;
-        case 'triangle':
-          shape = this.drawTriangle();
-          break;
-        default:
-          throw new Error('Invalid shape type');
-      }
-      return shape;
-    }
-  
-    drawRectangle() {
-      let shape = '';
-      for (let i = 0; i < this.rows; i++) {
-        for (let j = 0; j < this.columns; j++) {
-          shape += this.drawChar;
-        }
-        shape += '\n';
-      }
-      return shape;
-    }
-  
-    drawSquare() {
-      return this.drawRectangle();
-    }
-  
-    drawTriangle() {
-      let shape = '';
-      for (let i = 1; i <= this.rows; i++) {
-        shape += this.drawChar.repeat(i);
-        shape += '\n';
-      }
-      return shape;
-    }
-  
-    alignShape(shape) {
-      let alignedShape = '';
-      const rowsArr = shape.trim().split('\n');
-      const maxWidth = Math.max(...rowsArr.map(row => row.length));
-  
-      for (let row of rowsArr) {
-        let spaces = '';
-        if (this.alignment === 'center') {
-          spaces = ' '.repeat(Math.floor((maxWidth - row.length) / 2));
-        } else if (this.alignment === 'right') {
-          spaces = ' '.repeat(maxWidth - row.length);
-        }
-        alignedShape += spaces + row + '\n';
-      }
-      return alignedShape;
-    }
+class GeometricShape {
+  constructor(type, alignment, drawChar, numRows, numColumns) {
+    this.type = type;
+    this.alignment = alignment;
+    this.drawChar = drawChar;
+    this.numRows = numRows;
+    this.numColumns = numColumns;
   }
-  
-  
-  const shape = new Shape('triangle', 'center', 'A', 5, 5);
-  const drawnShape = shape.draw();
-  const alignedShape = shape.alignShape(drawnShape);
-  console.log(alignedShape);
-  
+
+  draw() {
+    let shape = '';
+    switch (this.type) {
+      case 'rectangle':
+        shape = this.drawRectangle();
+        break;
+      case 'square':
+        shape = this.drawSquare();
+        break;
+      case 'triangle':
+        shape = this.drawTriangle();
+        break;
+      default:
+        throw new Error('Invalid shape type');
+    }
+    return shape;
+  }
+
+  drawRectangle() {
+    let shape = '';
+    for (let i = 0; i < this.numRows; i++) {
+      for (let j = 0; j < this.numColumns; j++) {
+        shape += this.drawChar;
+      }
+      shape += '\n';
+    }
+    return shape;
+  }
+
+  drawSquare() {
+    return this.drawRectangle();
+  }
+
+  drawTriangle() {
+    let shape = '';
+    for (let i = 1; i <= this.numRows; i++) {
+      const str = this.drawChar.repeat(i * 2 - 1);
+      let padding = '';
+      if (this.alignment === 'left') {
+        padding = '';
+      } else if (this.alignment === 'center') {
+        const totalSpaces = this.numRows - i;
+        padding = ' '.repeat(totalSpaces);
+      } else if (this.alignment === 'right') {
+        const totalSpaces = this.numRows - i;
+        padding = ' '.repeat(totalSpaces * 2);
+      }
+      shape += padding + str + '\n';
+    }
+    return shape;
+  }
+
+  alignShape(shape) {
+    return shape; 
+  }
+}
+const shape = new GeometricShape('triangle', 'center', 'A', 5, 0);
+const drawnShape = shape.draw();
+console.log(drawnShape);
